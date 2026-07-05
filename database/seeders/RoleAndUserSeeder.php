@@ -13,33 +13,40 @@ class RoleAndUserSeeder extends Seeder
     public function run(): void
     {
         // 1. Masukkan Data Role Wajib (Admin, Staff, Manager)
-        $adminRole = Role::create(['name' => 'Admin']);
-        $staffRole = Role::create(['name' => 'Staff']);
-        $managerRole = Role::create(['name' => 'Manager']);
-        Category::create(['name' => 'Elektronik']);
-        Category::create(['name' => 'Aset Kantor']);
-        Category::create(['name' => 'Alat Tulis Kantor (ATK)']);
+        $adminRole   = Role::firstOrCreate(['name' => 'Admin']);
+        $staffRole   = Role::firstOrCreate(['name' => 'Staff']);
+        $managerRole = Role::firstOrCreate(['name' => 'Manager']);
+
+        Category::firstOrCreate(['name' => 'Elektronik']);
+        Category::firstOrCreate(['name' => 'Aset Kantor']);
+        Category::firstOrCreate(['name' => 'Alat Tulis Kantor (ATK)']);
 
         // 2. Masukkan Akun Testing untuk Masing-Masing Role
-        User::create([
-            'name' => 'Admin Telkomsel',
-            'email' => 'admin@telkomsel.com',
-            'password' => Hash::make('password123'),
-            'role_id' => $adminRole->id,
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@telkomsel.com'],
+            [
+                'name'     => 'Admin Telkomsel',
+                'password' => Hash::make('password123'),
+                'role_id'  => $adminRole->id,
+            ]
+        );
 
-        User::create([
-            'name' => 'Staff Inventaris',
-            'email' => 'staff@telkomsel.com',
-            'password' => Hash::make('password123'),
-            'role_id' => $staffRole->id,
-        ]);
+        User::firstOrCreate(
+            ['email' => 'staff@telkomsel.com'],
+            [
+                'name'     => 'Staff Inventaris',
+                'password' => Hash::make('password123'),
+                'role_id'  => $staffRole->id,
+            ]
+        );
 
-        User::create([
-            'name' => 'Manager Telkomsel',
-            'email' => 'manager@telkomsel.com',
-            'password' => Hash::make('password123'),
-            'role_id' => $managerRole->id,
-        ]);
+        User::firstOrCreate(
+            ['email' => 'manager@telkomsel.com'],
+            [
+                'name'     => 'Manager Telkomsel',
+                'password' => Hash::make('password123'),
+                'role_id'  => $managerRole->id,
+            ]
+        );
     }
 }
