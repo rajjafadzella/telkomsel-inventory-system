@@ -104,7 +104,7 @@ jobs:
             --set-env-vars="SESSION_DRIVER=database" \
             --set-env-vars="CACHE_STORE=database" \
             --set-env-vars="QUEUE_CONNECTION=database" \
-            --set-env-vars="LOG_CHANNEL=stack" \
+            --set-env-vars="LOG_CHANNEL=stderr" \
             --set-env-vars="LOG_LEVEL=debug"
 
       # 8. Print URL hasil deploy
