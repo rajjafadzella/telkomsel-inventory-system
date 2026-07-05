@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Category;
 
 class RoleAndUserSeeder extends Seeder
 {
@@ -15,6 +16,9 @@ class RoleAndUserSeeder extends Seeder
         $adminRole = Role::create(['name' => 'Admin']);
         $staffRole = Role::create(['name' => 'Staff']);
         $managerRole = Role::create(['name' => 'Manager']);
+        Category::create(['name' => 'Elektronik']);
+        Category::create(['name' => 'Aset Kantor']);
+        Category::create(['name' => 'Alat Tulis Kantor (ATK)']);
 
         // 2. Masukkan Akun Testing untuk Masing-Masing Role
         User::create([

@@ -1,0 +1,79 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  IMAGE: ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REPO }}/telkomsel-app
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout kode
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Login ke GCP pakai Service Account
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      # 3. Setup gcloud di runner GitHub
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      # 4. Auth Docker ke Artifact Registry
+      - name: Configure Docker Auth
+        run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev --quiet
+
+      # 5. Build Docker Image
+      - name: Build Docker Image
+        run: |
+          docker build \
+            -t ${{ env.IMAGE }}:${{ github.sha }} \
+            -t ${{ env.IMAGE }}:latest .
+
+      # 6. Push ke Artifact Registry
+      - name: Push Docker Image
+        run: |
+          docker push ${{ env.IMAGE }}:${{ github.sha }}
+          docker push ${{ env.IMAGE }}:latest
+
+      # 7. Deploy ke Cloud Run
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy telkomsel-inventory \
+            --image=${{ env.IMAGE }}:${{ github.sha }} \
+            --platform=managed \
+            --region=${{ secrets.GCP_REGION }} \
+            --allow-unauthenticated \
+            --port=8080 \
+            --set-env-vars="APP_NAME=Telkomsel Inventory" \
+            --set-env-vars="APP_ENV=production" \
+            --set-env-vars="APP_DEBUG=false" \
+            --set-env-vars="APP_KEY=${{ secrets.APP_KEY }}" \
+            --set-env-vars="DB_CONNECTION=pgsql" \
+            --set-env-vars="DB_HOST=${{ secrets.DB_HOST }}" \
+            --set-env-vars="DB_PORT=5432" \
+            --set-env-vars="DB_DATABASE=postgres" \
+            --set-env-vars="DB_USERNAME=${{ secrets.DB_USERNAME }}" \
+            --set-env-vars="DB_PASSWORD=${{ secrets.DB_PASSWORD }}" \
+            --set-env-vars="SESSION_DRIVER=database" \
+            --set-env-vars="CACHE_STORE=database" \
+            --set-env-vars="QUEUE_CONNECTION=database" \
+            --set-env-vars="LOG_CHANNEL=stack" \
+            --set-env-vars="LOG_LEVEL=debug"
+
+      # 8. Print URL hasil deploy
+      - name: Get Service URL
+        run: |
+          URL=$(gcloud run services describe telkomsel-inventory \
+            --region=${{ secrets.GCP_REGION }} \
+            --format='value(status.url)')
+          echo "✅ App deployed at: $URL"

@@ -1,0 +1,30 @@
+# Dependencies (akan di-install ulang saat build)
+vendor/
+node_modules/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Environment (JANGAN ikut masuk image!)
+.env
+.env.backup
+.env.*.local
+
+# Docker files itu sendiri
+Dockerfile
+.dockerignore
+.docker/
+
+# Logs & cache lokal
+storage/logs/*.log
+bootstrap/cache/*.php
+
+# Testing
+tests/
+phpunit.xml
+
+# Build artifacts
+public/hot
+public/storage
