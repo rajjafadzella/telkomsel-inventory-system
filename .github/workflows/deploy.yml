@@ -76,6 +76,7 @@ jobs:
             --port=8080 \
             --set-env-vars="APP_NAME=Telkomsel Inventory" \
             --set-env-vars="APP_ENV=production" \
+            --set-env-vars="APP_URL=${{ secrets.APP_URL }}" \
             --set-env-vars="APP_DEBUG=false" \
             --set-env-vars="APP_KEY=${{ secrets.APP_KEY }}" \
             --set-env-vars="DB_CONNECTION=pgsql" \
