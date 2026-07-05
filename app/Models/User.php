@@ -52,4 +52,15 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class); // Relasi Many-to-One ke Role
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            if (!$user->role_id) {
+                $user->role_id = \App\Models\Role::firstOrCreate(['name' => 'Staff'])->id;
+            }
+        });
+    }
 }
