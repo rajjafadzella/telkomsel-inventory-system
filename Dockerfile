@@ -37,7 +37,8 @@ COPY .docker/nginx.conf /etc/nginx/nginx.conf
 EXPOSE 8080
 
 # Jalankan php-fpm di background (&), lalu nginx sebagai proses utama (foreground)
-CMD php artisan config:cache && \
+CMD php artisan migrate --force && \
+    php artisan config:cache && \
     php artisan route:cache && \
     php artisan view:cache && \
     php-fpm & \
