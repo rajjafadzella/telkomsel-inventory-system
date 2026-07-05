@@ -34,4 +34,12 @@ Route::middleware(['auth', 'role:Admin,Manager'])->group(function () {
     Route::get('reports', ReportController::class)->name('reports.index');
 });
 
+Route::get('/storage/{path}', function ($path) {
+    $path = str_replace('../', '', $path);
+    if (!\Illuminate\Support\Facades\Storage::disk('public')->exists($path)) {
+        abort(404);
+    }
+    return response()->file(\Illuminate\Support\Facades\Storage::disk('public')->path($path));
+})->where('path', '.*');
+
 require __DIR__.'/auth.php';
