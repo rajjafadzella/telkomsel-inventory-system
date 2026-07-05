@@ -6,6 +6,8 @@ RUN apk add --no-cache \
     nginx \
     curl \
     libpq-dev \
+    nodejs \
+    npm \
     && docker-php-ext-install pdo pdo_pgsql
 
 # Install Composer terbaru
@@ -25,6 +27,9 @@ COPY . .
 
 # Jalankan composer scripts setelah semua file ada
 RUN composer dump-autoload --optimize
+
+# Build frontend assets (CSS/JS via Vite)
+RUN npm ci && npm run build
 
 # Set permission agar Nginx/Laravel bisa menulis log dan cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
