@@ -9,6 +9,9 @@ php artisan view:cache
 echo "Creating storage symlink..."
 php artisan storage:link || true
 
+echo "=== Debug public/ directory ==="
+ls -la public || true
+
 echo "Starting PHP-FPM..."
 php-fpm &
 

@@ -13,6 +13,14 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        
+        <script>
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        </script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -32,5 +40,46 @@
                 {{ $slot }}
             </main>
         </div>
+
+        <script>
+            var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+            var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+            var themeToggleDarkIconMobile = document.getElementById('theme-toggle-dark-icon-mobile');
+            var themeToggleLightIconMobile = document.getElementById('theme-toggle-light-icon-mobile');
+
+            // Set icons based on current theme state
+            if (localStorage.getItem('theme') === 'dark') {
+                if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
+                if (themeToggleLightIconMobile) themeToggleLightIconMobile.classList.remove('hidden');
+            } else {
+                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
+                if (themeToggleDarkIconMobile) themeToggleDarkIconMobile.classList.remove('hidden');
+            }
+
+            function toggleTheme() {
+                if (themeToggleDarkIcon) themeToggleDarkIcon.classList.toggle('hidden');
+                if (themeToggleLightIcon) themeToggleLightIcon.classList.toggle('hidden');
+                if (themeToggleDarkIconMobile) themeToggleDarkIconMobile.classList.toggle('hidden');
+                if (themeToggleLightIconMobile) themeToggleLightIconMobile.classList.toggle('hidden');
+
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            }
+
+            var themeToggleBtn = document.getElementById('theme-toggle');
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', toggleTheme);
+            }
+
+            var themeToggleBtnMobile = document.getElementById('theme-toggle-mobile');
+            if (themeToggleBtnMobile) {
+                themeToggleBtnMobile.addEventListener('click', toggleTheme);
+            }
+        </script>
     </body>
 </html>
