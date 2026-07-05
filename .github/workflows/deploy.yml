@@ -35,9 +35,15 @@ jobs:
       - name: Generate Application Key
         run: php artisan key:generate
 
+      - name: Install NPM Dependencies
+        run: npm install
+
+      - name: Build NPM Assets
+        run: npm run build
+
       - name: Run Automated Tests
         run: php artisan test
-
+      
 
       # 2. Login ke GCP pakai Service Account
       - name: Authenticate to GCP
