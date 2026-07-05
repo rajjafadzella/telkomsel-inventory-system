@@ -33,13 +33,12 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Salin konfigurasi Nginx internal
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
 
+# Salin startup script
+COPY .docker/start.sh /start.sh
+RUN chmod +x /start.sh
+
 # Port standar yang wajib dibuka untuk Google Cloud Run
 EXPOSE 8080
 
-# Jalankan php-fpm di background (&), lalu nginx sebagai proses utama (foreground)
-CMD php artisan migrate --force && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache && \
-    php-fpm & \
-    nginx -g 'daemon off;'
+# Jalankan via startup script (urutan terjamin: migrate → cache → php-fpm → nginx)
+CMD ["/start.sh"]
