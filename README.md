@@ -1,59 +1,157 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Asset Inventory Management System (Sistem Manajemen Inventaris Aset)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem Informasi Inventaris Aset adalah platform berbasis web yang digunakan untuk mencatat data barang operasional kantor, memproses transaksi peminjaman secara otomatis, serta menyajikan laporan sirkulasi barang.
 
-## About Laravel
+## Fitur Utama
+1. **Multi-Role Authentication:** Hak akses terbagi menjadi 3 level (Admin, Staff, Manager).
+2. **Master Data Barang (CRUD):** Pencatatan barang dengan kode barang unik, kategori, stok, lokasi, kondisi, dan unggahan foto barang.
+3. **Transaksi Peminjaman & Pengembalian:** Pengurangan stok otomatis saat dipinjam, dan pengembalian barang terkonfirmasi.
+4. **Dashboard & Statistik:** Visualisasi grafik tren peminjaman per bulan menggunakan Chart.js.
+5. **Laporan & Ekspor Data:** Filter laporan sirkulasi barang berdasarkan rentang tanggal, dengan opsi Cetak PDF dan Export Excel (CSV).
+6. **REST API:** Menyediakan endpoint JSON untuk integrasi platform eksternal.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Stack Teknologi yang Digunakan
+* **Backend:** PHP 8.2 & Laravel 12
+* **Frontend:** Tailwind CSS (Laravel Breeze) & Chart.js
+* **Database:** PostgreSQL (Hosted on Supabase)
+* **Kontainerisasi:** Docker
+* **CI/CD:** GitHub Actions (Automated Testing via PHPUnit)
+* **Cloud Hosting:** Google Cloud Run (GCP)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Cara Instalasi & Menjalankan Proyek secara Lokal
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 1. Prasyarat
+Pastikan laptop Anda sudah terinstall:
+* PHP 8.2 atau lebih tinggi
+* Composer
+* Node.js & NPM
+* Database PostgreSQL atau MySQL
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 2. Kloning Repository
+```bash
+git clone https://github.com/rajjafadzella/inventory-system.git
+cd inventory-system
+```
 
-## Laravel Sponsors
+### 3. Install Dependensi PHP & JavaScript
+```bash
+composer install
+npm install
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 4. Konfigurasi Environment File
+Salin file `.env.example` menjadi `.env`:
+```bash
+cp .env.example .env
+```
+Buka file `.env` baru tersebut, lalu sesuaikan konfigurasi database Anda:
+```env
+DB_CONNECTION=pgsql
+DB_HOST=your-supabase-db-host
+DB_PORT=5432
+DB_DATABASE=postgres
+DB_USERNAME=your-username
+DB_PASSWORD=your-password
+```
 
-### Premium Partners
+### 5. Generate Application Key & Migrasi Database
+```bash
+php artisan key:generate
+php artisan migrate --seed
+```
+*Perintah di atas sekaligus akan membuat tabel dan mengisi data role, kategori, serta akun testing bawaan.*
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 6. Compile Asset Frontend & Jalankan Server Lokal
+```bash
+# Compile asset JS/CSS
+npm run dev
 
-## Contributing
+# Jalankan server local PHP
+php artisan serve
+```
+Akses aplikasi melalui browser Anda di: `http://127.0.0.1:8000`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## Cara Menjalankan Pengujian (Automated Testing)
+Proyek ini dilengkapi dengan unit dan feature testing untuk memastikan integritas logika bisnis.
+Untuk menjalankan pengujian secara lokal, jalankan perintah berikut:
+```bash
+php artisan test
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## Akun Login Testing (Bawaan Database Seeder)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+* **Role Admin (Full Access)**
+  * **Email:** `admin@telkomsel.com`
+  * **Password:** `password123`
+* **Role Staff (Kelola Barang & Peminjaman)**
+  * **Email:** `staff@telkomsel.com`
+  * **Password:** `password123`
+* **Role Manager (Hanya Melihat Laporan)**
+  * **Email:** `manager@telkomsel.com`
+  * **Password:** `password123`
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📡 Dokumentasi REST API
+
+Semua request REST API mengembalikan data berformat JSON.
+
+### 1. Get All Products
+Mendapatkan semua daftar barang inventaris.
+* **Endpoint:** `GET /api/products`
+* **Response Contoh (200 OK):**
+```json
+{
+  "status": "success",
+  "message": "Daftar barang inventaris",
+  "data": [
+    {
+      "id": 1,
+      "code": "ELK-LPT-001",
+      "name": "Laptop Lenovo ThinkPad",
+      "category_id": 1,
+      "stock": 12,
+      "location": "Gudang IT",
+      "condition": "Bagus",
+      "image": "products/Thinkpad.jpg",
+      "category": {
+        "id": 1,
+        "name": "Elektronik"
+      }
+    }
+  ]
+}
+```
+
+### 2. Get Product Detail
+Mendapatkan informasi detail satu barang berdasarkan ID.
+* **Endpoint:** `GET /api/products/{id}`
+* **Response Contoh (200 OK):**
+```json
+{
+  "status": "success",
+  "message": "Detail barang inventaris",
+  "data": {
+    "id": 1,
+    "code": "ELK-LPT-001",
+    "name": "Laptop Lenovo ThinkPad",
+    "category_id": 1,
+    "stock": 12,
+    "location": "Gudang IT",
+    "condition": "Bagus",
+    "image": "products/Thinkpad.jpg",
+    "category": {
+      "id": 1,
+      "name": "Elektronik"
+    }
+  }
+}
+```
